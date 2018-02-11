@@ -15,7 +15,7 @@ class TaskController extends Controller
     public function index()
     {
         //$tasks = Task::orderBy('id','DESC')->get();
-        $tasks = Task::orderBy('id','DESC')->paginate(4);
+        $tasks = Task::orderBy('id','ASC')->paginate(5);
 
         return [
             'paginate' =>[
