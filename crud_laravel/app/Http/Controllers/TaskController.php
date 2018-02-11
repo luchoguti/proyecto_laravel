@@ -14,18 +14,20 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::get();
-        return $tasks;
-    }
+        //$tasks = Task::orderBy('id','DESC')->get();
+        $tasks = Task::orderBy('id','DESC')->paginate(4);
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return [
+            'paginate' =>[
+                'total'         => $tasks->total(),
+                'current_page'  => $tasks->currentPage(),
+                'per_page'      => $tasks->perPage(),
+                'last_page'     => $tasks->lastPage(),
+                'from'          => $tasks->firstItem(),
+                'to'            => $tasks->lastPage(),
+            ],
+            'tasks' => $tasks
+        ];
     }
 
     /**
@@ -36,19 +38,11 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $task = Task::findOrFail($id);
-        //formulario
-        return $task;
+        $this->validate($request,[
+            'keep'=>'required'
+        ]);
+        Task::create($request->all());
+        return;
     }
 
     /**
@@ -58,9 +52,15 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id )
     {
-        //
+        $this->validate($request,[
+            'id'=> 'required',
+            'keep'=>'required'
+        ]);
+        Task::find($id)->update($request->all());
+       // Task::where('id','=',$request->id)->update(['keep'=>$request->keep]);
+        return;
     }
 
     /**

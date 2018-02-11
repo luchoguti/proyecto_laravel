@@ -12,4 +12,4 @@
 */
 
 Route::get('/', 'FrontEndController@home');
-Route::resource('tasks','TaskController',['except'=>'show']);
+Route::resource('tasks','TaskController',['except'=>'show','cretae','edit']);
